@@ -1,0 +1,59 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>com.techtrove</groupId>
+  <artifactId>tech-trove-pom</artifactId>
+  <version>1.0.0-SNAPSHOT</version>
+  <packaging>pom</packaging>
+
+  <name>tech-trove-pom</name>
+  <description>Parent Pom for the tech-trove project</description>
+
+  <parent>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-parent</artifactId>
+    <version>3.1.4</version>
+    <relativePath/> <!-- lookup parent from repository -->
+  </parent>
+
+  <properties>
+    <docker.image.prefix>tech-trove</docker.image.prefix>
+
+    <!-- test result measurements -->
+    <project.test.result.directory>${project.build.directory}/test-results</project.test.result.directory>
+    <!--suppress UnresolvedMavenProperty -->
+    <sonar.host.url>${SONAR_URL}</sonar.host.url>
+    <sonar.projectKey>${project.name}</sonar.projectKey>
+    <!--suppress UnresolvedMavenProperty -->
+    <sonar.token>${SONAR_TOKEN}</sonar.token>
+    <sonar.scm.provider>git</sonar.scm.provider>
+    <sonar.java.codeCoveragePlugin>jacoco</sonar.java.codeCoveragePlugin>
+    <sonar.coverage.jacoco.xmlReportPaths>${project.test.result.directory}/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
+    <sonar.exclusions>
+      **/*.xml
+    </sonar.exclusions>
+    <sonar.coverage.exclusions>
+      **/${project.name}/*
+    </sonar.coverage.exclusions>
+  </properties>
+
+  <modules>
+    <module>product-service</module>
+    <module>order-service</module>
+    <module>user-service</module>
+  </modules>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>com.spotify</groupId>
+        <artifactId>dockerfile-maven-plugin</artifactId>
+        <version>1.4.13</version>
+        <configuration>
+          <skip>true</skip>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>
