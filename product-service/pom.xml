@@ -2,24 +2,29 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
+
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>3.1.4</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
+
 	<groupId>com.techtrove</groupId>
 	<artifactId>product-service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>product-service</name>
 	<description>product-service</description>
+
 	<properties>
 		<java.version>17</java.version>
+		<org.mapstruct.version>1.5.5.Final</org.mapstruct.version>
+		<lombok-mapstruct-binding>0.2.0</lombok-mapstruct-binding>
+
+		<!-- test result measurements -->
 		<sonar-maven-plugin.version>3.10.0.2594</sonar-maven-plugin.version>
 		<jacoco-maven-plugin.version>0.8.10</jacoco-maven-plugin.version>
 		<maven-surefire-plugin.version>3.1.2</maven-surefire-plugin.version>
-
-		<!-- test result measurements -->
 		<project.test.result.directory>${project.build.directory}/test-results</project.test.result.directory>
 		<!--suppress UnresolvedMavenProperty -->
 		<sonar.host.url>${SONAR_URL}</sonar.host.url>
@@ -29,11 +34,15 @@
 		<sonar.scm.provider>git</sonar.scm.provider>
 		<sonar.java.codeCoveragePlugin>jacoco</sonar.java.codeCoveragePlugin>
 		<sonar.coverage.jacoco.xmlReportPaths>${project.test.result.directory}/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
-		<sonar.exclusions>
-			**/*.xml
-		</sonar.exclusions>
-		<sonar.coverage.exclusions>
-			**/${project.name}/*
+		<sonar.exclusions>**/*.xml</sonar.exclusions>
+		<sonar.coverage.exclusions>**/${project.name}/*,
+			**/application/RestResponseEntityExceptionHandler.java,
+			**/application/converter/*.java,
+			**/application/request/*.java,
+			**/application/response/*.java,
+			**/domain/*.java,
+			**/infrastructure/repository/config/*.java,
+			**/infrastructure/repository/converter/*.java
 		</sonar.coverage.exclusions>
 	</properties>
 
@@ -48,9 +57,12 @@
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-devtools</artifactId>
-			<scope>runtime</scope>
-			<optional>true</optional>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-validation</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.projectlombok</groupId>
@@ -58,14 +70,48 @@
 			<optional>true</optional>
 		</dependency>
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-test</artifactId>
-			<scope>test</scope>
+			<groupId>org.mapstruct</groupId>
+			<artifactId>mapstruct</artifactId>
+			<version>${org.mapstruct.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok-mapstruct-binding</artifactId>
+			<version>${lombok-mapstruct-binding}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+			<version>2.1.0</version>
 		</dependency>
 	</dependencies>
 
 	<build>
 		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.11.0</version>
+				<configuration>
+					<annotationProcessorPaths>
+						<path>
+							<groupId>org.mapstruct</groupId>
+							<artifactId>mapstruct-processor</artifactId>
+							<version>${org.mapstruct.version}</version>
+						</path>
+						<path>
+							<groupId>org.projectlombok</groupId>
+							<artifactId>lombok-mapstruct-binding</artifactId>
+							<version>${lombok-mapstruct-binding}</version>
+						</path>
+						<path>
+							<groupId>org.projectlombok</groupId>
+							<artifactId>lombok</artifactId>
+							<version>${lombok.version}</version>
+						</path>
+					</annotationProcessorPaths>
+				</configuration>
+			</plugin>
 			<plugin>
 				<groupId>com.spotify</groupId>
 				<artifactId>dockerfile-maven-plugin</artifactId>
@@ -101,6 +147,19 @@
 						</configuration>
 					</execution>
 				</executions>
+				<configuration>
+					<excludes>
+						<exclude>
+							com/techtrove/productservice/application/RestResponseEntityExceptionHandler.class
+						</exclude>
+						<exclude>com/techtrove/productservice/application/converter/*.class</exclude>
+						<exclude>com/techtrove/productservice/application/request/*.class</exclude>
+						<exclude>com/techtrove/productservice/application/response/*.class</exclude>
+						<exclude>com/techtrove/productservice/domain/*.class</exclude>
+						<exclude>com/techtrove/productservice/infrastructure/repository/config/*.class</exclude>
+						<exclude>com/techtrove/productservice/infrastructure/repository/converter/*.class</exclude>
+					</excludes>
+				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
