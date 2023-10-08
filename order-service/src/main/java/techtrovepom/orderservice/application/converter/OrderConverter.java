@@ -9,10 +9,8 @@ import techtrovepom.orderservice.application.request.CreateOrderRequest;
 import techtrovepom.orderservice.application.request.UpdateOrderRequest;
 import techtrovepom.orderservice.application.response.OrderResponse;
 import techtrovepom.orderservice.domain.Order;
-import techtrovepom.orderservice.domain.OrderItem;
 
 import java.time.ZonedDateTime;
-import java.util.List;
 
 @Mapper(imports = {ZonedDateTime.class})
 public interface OrderConverter {
