@@ -2,8 +2,6 @@ package com.techtrove.productservice.infrastructure.repository;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.techtrove.productservice.domain.Product;
-import com.techtrove.productservice.domain.respository.ProductRepository;
-import com.techtrove.productservice.domain.service.ProductServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

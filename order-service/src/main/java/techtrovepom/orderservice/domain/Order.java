@@ -1,4 +1,4 @@
-package com.techtrove.productservice.domain;
+package techtrovepom.orderservice.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,38 +10,34 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
+import java.util.List;
 
 @Builder
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Document
-public class Product {
+public class Order {
 
     @Id
     private String id;
 
     @Indexed
-    private String sku;
+    private String referenceId;
 
-    private String title;
+    @Indexed
+    private String userId;
 
-    private String categoryId;
+    private ZonedDateTime date;
 
-    private String description;
+    private Payment payment;
 
-    private String link;
+    private List<OrderItem> products;
 
-    private Boolean availability;
-
-    private ZonedDateTime availabilityDate;
-
-    private ZonedDateTime expirationDate;
+    private BigDecimal total;
 
     private ZonedDateTime createdAt;
 
     private ZonedDateTime updatedAt;
-
-    private BigDecimal price;
 
 }

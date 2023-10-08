@@ -1,10 +1,7 @@
-package com.techtrove.productservice.application;
+package techtrovepom.orderservice.application;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.techtrove.productservice.application.converter.ProductConverter;
-import com.techtrove.productservice.domain.Product;
-import com.techtrove.productservice.domain.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,6 +9,8 @@ import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
@@ -19,53 +18,63 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import techtrovepom.orderservice.application.converter.OrderConverter;
+import techtrovepom.orderservice.domain.Order;
+import techtrovepom.orderservice.domain.OrderItem;
+import techtrovepom.orderservice.domain.Payment;
+import techtrovepom.orderservice.domain.service.OrderService;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-@WebMvcTest(ProductController.class)
+@WebMvcTest(OrderController.class)
 @ContextConfiguration
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
-class ProductControllerTest {
+class OrderControllerTest {
 
     private final MockMvc mockMvc;
 
     private final ObjectMapper objectMapper;
 
     @MockBean
-    private ProductService productService;
+    private OrderService orderService;
 
-    private Product product;
+    private Order order;
     private String expectedResponse;
 
     @BeforeEach
     public void init() throws JsonProcessingException {
-        product = Product.builder()
-                .id("6521edebb9ae5f1b1d01d5a8")
-                .sku("1112123899")
-                .title("title")
-                .description("description")
-                .availability(true)
-                .expirationDate(ZonedDateTime.of(LocalDateTime.now(), ZoneId.of("UTC")))
-                .price(new BigDecimal("50300.0"))
+        order = Order.builder()
+                .id("6523262fdf346f233146a544")
+                .referenceId("f0885721-fb2e-4c81-9a32-eaa4a9e40c1b")
+                .date(ZonedDateTime.of(LocalDateTime.now(), ZoneId.of("UTC")))
+                .payment(Payment.CASH)
+                .products(new ArrayList<>(Arrays.asList(
+                        OrderItem.builder().productId("6523262fdf346f233146a545").quantity(11L).build(),
+                        OrderItem.builder().productId("6523262fdf346f233146a546").quantity(1L).build()
+                )))
+                .total(new BigDecimal("23600.0"))
                 .build();
 
-        expectedResponse = objectMapper.writeValueAsString(ProductConverter.INSTANCE.toResponse(product));
+        expectedResponse = objectMapper.writeValueAsString(OrderConverter.INSTANCE.toResponse(order));
     }
 
     @Test
-    void getProductById() throws Exception {
+    void getOrderById() throws Exception {
 
-        when(productService.getProductById(any())).thenReturn(product);
+        when(orderService.getOrderById(any())).thenReturn(order);
 
         RequestBuilder request = MockMvcRequestBuilders
-                .get("/v1/products/{id}", "6521edebb9ae5f1b1d01d5a8")
+                .get("/v1/orders/{id}", "6521edebb9ae5f1b1d01d5a8")
                 .contentType(MediaType.APPLICATION_JSON);
 
 
@@ -77,14 +86,14 @@ class ProductControllerTest {
     }
 
     @Test
-    void createProduct() throws Exception {
+    void createOrder() throws Exception {
 
-        when(productService.createProduct(any())).thenReturn(product);
+        when(orderService.createOrder(any())).thenReturn(order);
 
         RequestBuilder request = MockMvcRequestBuilders
-                .post("/v1/products")
+                .post("/v1/orders")
                 .accept(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(product))
+                .content(objectMapper.writeValueAsString(order))
                 .contentType(MediaType.APPLICATION_JSON);
 
         MvcResult result = mockMvc.perform(request).andReturn();
@@ -95,15 +104,15 @@ class ProductControllerTest {
     }
 
     @Test
-    void updateProduct() throws Exception {
+    void updateOrder() throws Exception {
 
-        when(productService.getProductById(any())).thenReturn(product);
-        when(productService.updateProduct(any())).thenReturn(product);
+        when(orderService.getOrderById(any())).thenReturn(order);
+        when(orderService.updateOrder(any())).thenReturn(order);
 
         RequestBuilder request = MockMvcRequestBuilders
-                .put("/v1/products/{id}", "6521edebb9ae5f1b1d01d5a8")
+                .put("/v1/orders/{id}", "6521edebb9ae5f1b1d01d5a8")
                 .accept(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(product))
+                .content(objectMapper.writeValueAsString(order))
                 .contentType(MediaType.APPLICATION_JSON);
 
         MvcResult result = mockMvc.perform(request).andReturn();
@@ -118,7 +127,7 @@ class ProductControllerTest {
     void deleteProdcutById() throws Exception {
 
         RequestBuilder request = MockMvcRequestBuilders
-                .delete("/v1/products/{id}", "6521edebb9ae5f1b1d01d5a8")
+                .delete("/v1/orders/{id}", "6521edebb9ae5f1b1d01d5a8")
                 .contentType(MediaType.APPLICATION_JSON);
 
 

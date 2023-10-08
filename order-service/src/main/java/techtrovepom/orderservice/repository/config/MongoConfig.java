@@ -1,10 +1,10 @@
-package com.techtrove.productservice.infrastructure.repository.config;
+package techtrovepom.orderservice.repository.config;
 
-import com.techtrove.productservice.infrastructure.repository.converter.ZonedDateTimeReadConverter;
-import com.techtrove.productservice.infrastructure.repository.converter.ZonedDateTimeWriteConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.core.convert.MongoCustomConversions;
+import techtrovepom.orderservice.repository.converter.ZonedDateTimeReadConverter;
+import techtrovepom.orderservice.repository.converter.ZonedDateTimeWriteConverter;
 
 import static java.util.Arrays.asList;
 

@@ -22,6 +22,8 @@ public class CreateProductRequest {
     @NotBlank(message = "title is required")
     private String title;
 
+    private String categoryId;
+
     @NotBlank(message = "description is required")
     private String description;
 

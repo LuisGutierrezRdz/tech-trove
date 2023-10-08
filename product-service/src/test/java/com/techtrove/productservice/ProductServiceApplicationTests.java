@@ -23,7 +23,7 @@ class ProductServiceApplicationTests {
 	void contextLoads() throws JSONException {
 		final var product = Product.builder()
 				.id("6521edebb9ae5f1b1d01d5a8")
-				.sku("1112123899")
+				.sku("1112123891")
 				.title("title")
 				.description("description")
 				.availability(true)
@@ -35,7 +35,7 @@ class ProductServiceApplicationTests {
 
 		String responseGet = restTemplate.getForObject("/v1/products/{id}", String.class, responsePost.getId());
 		JSONAssert.assertEquals("""
-			{"sku":"1112123899"}
+			{"sku":"1112123891"}
 			""", responseGet, false);
 
 		restTemplate.delete("/v1/products/{id}", responsePost.getId());

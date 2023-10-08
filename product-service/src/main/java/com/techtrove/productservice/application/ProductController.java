@@ -15,6 +15,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.ZonedDateTime;
+
 @RestController
 @RequestMapping("/v1/products")
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
@@ -59,7 +61,6 @@ public class ProductController {
             @ApiResponse(responseCode = "401", description = "Unauthorized."),
             @ApiResponse(responseCode = "404", description = "Product not found.")
     })
-
     @PutMapping(value = "{id}",
             produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -68,6 +69,7 @@ public class ProductController {
                                          @Valid @RequestBody final UpdateProductRequest request) {
 
         final var product = productService.getProductById(id);
+        product.setUpdatedAt(ZonedDateTime.now());
         ProductConverter.INSTANCE.update(product, request);
         final var updatedProduct = productService.updateProduct(product);
 
