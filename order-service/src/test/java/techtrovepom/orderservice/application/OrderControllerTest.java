@@ -11,6 +11,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -32,6 +33,7 @@ import java.util.Arrays;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 
 @WebMvcTest(OrderController.class)
 @ContextConfiguration
@@ -66,6 +68,7 @@ class OrderControllerTest {
     }
 
     @Test
+    @WithMockUser
     void getOrderById() throws Exception {
 
         when(orderService.getOrderById(any())).thenReturn(order);
@@ -83,12 +86,14 @@ class OrderControllerTest {
     }
 
     @Test
+    @WithMockUser
     void createOrder() throws Exception {
 
         when(orderService.createOrder(any())).thenReturn(order);
 
         RequestBuilder request = MockMvcRequestBuilders
                 .post("/v1/orders")
+                .with(csrf())
                 .accept(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(order))
                 .contentType(MediaType.APPLICATION_JSON);
@@ -101,6 +106,7 @@ class OrderControllerTest {
     }
 
     @Test
+    @WithMockUser
     void updateOrder() throws Exception {
 
         when(orderService.getOrderById(any())).thenReturn(order);
@@ -108,6 +114,7 @@ class OrderControllerTest {
 
         RequestBuilder request = MockMvcRequestBuilders
                 .put("/v1/orders/{id}", "6521edebb9ae5f1b1d01d5a8")
+                .with(csrf())
                 .accept(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(order))
                 .contentType(MediaType.APPLICATION_JSON);
@@ -119,10 +126,12 @@ class OrderControllerTest {
     }
 
     @Test
+    @WithMockUser
     void deleteOrderById() throws Exception {
 
         RequestBuilder request = MockMvcRequestBuilders
                 .delete("/v1/orders/{id}", "6521edebb9ae5f1b1d01d5a8")
+                .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON);
 
 

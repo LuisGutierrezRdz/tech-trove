@@ -9,3 +9,10 @@ spring:
       username: tech-trove-order
       password: rnY3MLr9
       database: order-db
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: "http://127.0.0.1/realms/tech-trove-realm"
+          jwk-set-uri: "http://127.0.0.1/realms/tech-trove-realm/protocol/openid-connect/certs"

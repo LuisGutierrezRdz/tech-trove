@@ -16,7 +16,6 @@ class ProductServiceApplicationTests {
 	@Test
 	void contextLoads() throws JSONException {
 
-
 		String responseGet = restTemplate
 				.withBasicAuth("user", "passwd")
 				.getForObject("/v1/products/{id}", String.class, "responsePost.getId()");
