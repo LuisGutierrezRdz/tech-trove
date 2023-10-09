@@ -1,10 +1,11 @@
-package com.techtrove.productservice.application;
+package com.techtrove.userservice.application;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.techtrove.productservice.application.converter.ProductConverter;
-import com.techtrove.productservice.domain.Product;
-import com.techtrove.productservice.domain.service.ProductService;
+import com.techtrove.userservice.application.converter.UserConverter;
+import com.techtrove.userservice.domain.Role;
+import com.techtrove.userservice.domain.User;
+import com.techtrove.userservice.domain.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,52 +21,46 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-@WebMvcTest(ProductController.class)
+@WebMvcTest(UserController.class)
 @ContextConfiguration
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
-class ProductControllerTest {
+class UserControllerTest {
 
     private final MockMvc mockMvc;
 
     private final ObjectMapper objectMapper;
 
     @MockBean
-    private ProductService productService;
+    private UserService userService;
 
-    private Product product;
+    private User user;
     private String expectedResponse;
 
     @BeforeEach
     public void init() throws JsonProcessingException {
-        product = Product.builder()
-                .id("6521edebb9ae5f1b1d01d5a8")
-                .sku("1112123899")
-                .title("title")
-                .description("description")
-                .availability(true)
-                .expirationDate(ZonedDateTime.of(LocalDateTime.now(), ZoneId.of("UTC")))
-                .price(new BigDecimal("50300.0"))
+        user = User.builder()
+                .id("6523262fdf346f233146a543")
+                .email("example@company.com")
+                .firstName("FirstName")
+                .lastName("LastName")
+                .phone("+524758691256")
+                .role(Role.USER)
                 .build();
 
-        expectedResponse = objectMapper.writeValueAsString(ProductConverter.INSTANCE.toResponse(product));
+        expectedResponse = objectMapper.writeValueAsString(UserConverter.INSTANCE.toResponse(user));
     }
 
     @Test
-    void getProductById() throws Exception {
+    void getUserById() throws Exception {
 
-        when(productService.getProductById(any())).thenReturn(product);
+        when(userService.getUserById(any())).thenReturn(user);
 
         RequestBuilder request = MockMvcRequestBuilders
-                .get("/v1/products/{id}", "6521edebb9ae5f1b1d01d5a8")
+                .get("/v1/users/{id}", "6521edebb9ae5f1b1d01d5a8")
                 .contentType(MediaType.APPLICATION_JSON);
 
 
@@ -77,14 +72,14 @@ class ProductControllerTest {
     }
 
     @Test
-    void createProduct() throws Exception {
+    void createUser() throws Exception {
 
-        when(productService.createProduct(any())).thenReturn(product);
+        when(userService.createUser(any())).thenReturn(user);
 
         RequestBuilder request = MockMvcRequestBuilders
-                .post("/v1/products")
+                .post("/v1/users")
                 .accept(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(product))
+                .content(objectMapper.writeValueAsString(user))
                 .contentType(MediaType.APPLICATION_JSON);
 
         MvcResult result = mockMvc.perform(request).andReturn();
@@ -95,28 +90,29 @@ class ProductControllerTest {
     }
 
     @Test
-    void updateProduct() throws Exception {
+    void updateUser() throws Exception {
 
-        when(productService.getProductById(any())).thenReturn(product);
-        when(productService.updateProduct(any())).thenReturn(product);
+        when(userService.getUserById(any())).thenReturn(user);
+        when(userService.updateUser(any())).thenReturn(user);
 
         RequestBuilder request = MockMvcRequestBuilders
-                .put("/v1/products/{id}", "6521edebb9ae5f1b1d01d5a8")
+                .put("/v1/users/{id}", "6521edebb9ae5f1b1d01d5a8")
                 .accept(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(product))
+                .content(objectMapper.writeValueAsString(user))
                 .contentType(MediaType.APPLICATION_JSON);
 
         MvcResult result = mockMvc.perform(request).andReturn();
 
         assertEquals(HttpStatus.OK.value(), result.getResponse().getStatus());
+
         JSONAssert.assertEquals(expectedResponse, result.getResponse().getContentAsString(), false);
     }
 
     @Test
-    void deleteProductById() throws Exception {
+    void deleteUserById() throws Exception {
 
         RequestBuilder request = MockMvcRequestBuilders
-                .delete("/v1/products/{id}", "6521edebb9ae5f1b1d01d5a8")
+                .delete("/v1/users/{id}", "6521edebb9ae5f1b1d01d5a8")
                 .contentType(MediaType.APPLICATION_JSON);
 
 

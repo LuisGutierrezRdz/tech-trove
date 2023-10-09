@@ -115,13 +115,11 @@ class OrderControllerTest {
         MvcResult result = mockMvc.perform(request).andReturn();
 
         assertEquals(HttpStatus.OK.value(), result.getResponse().getStatus());
-
-        var s = result.getResponse().getContentAsString();
         JSONAssert.assertEquals(expectedResponse, result.getResponse().getContentAsString(), false);
     }
 
     @Test
-    void deleteProdcutById() throws Exception {
+    void deleteOrderById() throws Exception {
 
         RequestBuilder request = MockMvcRequestBuilders
                 .delete("/v1/orders/{id}", "6521edebb9ae5f1b1d01d5a8")
