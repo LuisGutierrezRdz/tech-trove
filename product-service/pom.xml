@@ -18,6 +18,7 @@
 
 	<properties>
 		<java.version>17</java.version>
+		<spring-cloud.version>2022.0.3</spring-cloud.version>
 		<org.mapstruct.version>1.5.5.Final</org.mapstruct.version>
 		<lombok-mapstruct-binding>0.2.0</lombok-mapstruct-binding>
 
@@ -27,16 +28,17 @@
 		<maven-surefire-plugin.version>3.1.2</maven-surefire-plugin.version>
 		<project.test.result.directory>${project.build.directory}/test-results</project.test.result.directory>
 		<!--suppress UnresolvedMavenProperty -->
-		<sonar.host.url>${SONAR_URL}</sonar.host.url>
+		<sonar.host.url>http://127.0.0.1:9000</sonar.host.url>
 		<sonar.projectKey>${project.name}</sonar.projectKey>
 		<!--suppress UnresolvedMavenProperty -->
-		<sonar.token>${SONAR_TOKEN}</sonar.token>
+		<sonar.token>squ_851f90d6e9cf0e1cd331202cbcf44f00cc5eebb0</sonar.token>
 		<sonar.scm.provider>git</sonar.scm.provider>
 		<sonar.java.codeCoveragePlugin>jacoco</sonar.java.codeCoveragePlugin>
 		<sonar.coverage.jacoco.xmlReportPaths>${project.test.result.directory}/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
 		<sonar.exclusions>**/*.xml</sonar.exclusions>
 		<sonar.coverage.exclusions>**/${project.name}/*,
 			**/application/RestResponseEntityExceptionHandler.java,
+			**/application/config/*.java,
 			**/application/converter/*.java,
 			**/application/request/*.java,
 			**/application/response/*.java,
@@ -58,6 +60,11 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-test</artifactId>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -83,6 +90,19 @@
 			<groupId>org.springdoc</groupId>
 			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
 			<version>2.1.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-oauth2-jose</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
 		</dependency>
 	</dependencies>
 
@@ -152,6 +172,7 @@
 						<exclude>
 							com/techtrove/productservice/application/RestResponseEntityExceptionHandler.class
 						</exclude>
+						<exclude>com/techtrove/productservice/application/config/*.class</exclude>
 						<exclude>com/techtrove/productservice/application/converter/*.class</exclude>
 						<exclude>com/techtrove/productservice/application/request/*.class</exclude>
 						<exclude>com/techtrove/productservice/application/response/*.class</exclude>

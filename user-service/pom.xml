@@ -26,10 +26,10 @@
         <maven-surefire-plugin.version>3.1.2</maven-surefire-plugin.version>
         <project.test.result.directory>${project.build.directory}/test-results</project.test.result.directory>
         <!--suppress UnresolvedMavenProperty -->
-        <sonar.host.url>${SONAR_URL}</sonar.host.url>
+        <sonar.host.url>http://127.0.0.1:9000</sonar.host.url>
         <sonar.projectKey>${project.name}</sonar.projectKey>
         <!--suppress UnresolvedMavenProperty -->
-        <sonar.token>${SONAR_TOKEN}</sonar.token>
+        <sonar.token>squ_569ba5cec8a7cf33b9a10a90a2a13312ca5dfebf</sonar.token>
         <sonar.scm.provider>git</sonar.scm.provider>
         <sonar.java.codeCoveragePlugin>jacoco</sonar.java.codeCoveragePlugin>
         <sonar.coverage.jacoco.xmlReportPaths>${project.test.result.directory}/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>

@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.ZonedDateTime;
@@ -32,7 +33,7 @@ public class ProductController {
     })
     @GetMapping(value = "{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public ProductResponse getProductById(@PathVariable final String id) {
+    public ProductResponse getProductById(Authentication auth, @PathVariable final String id) {
 
         final var product = productService.getProductById(id);
 

@@ -14,7 +14,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.ContextConfiguration;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.RequestBuilder;
@@ -28,9 +28,9 @@ import java.time.ZonedDateTime;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 
 @WebMvcTest(ProductController.class)
-@ContextConfiguration
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 class ProductControllerTest {
 
@@ -60,6 +60,7 @@ class ProductControllerTest {
     }
 
     @Test
+    @WithMockUser
     void getProductById() throws Exception {
 
         when(productService.getProductById(any())).thenReturn(product);
@@ -77,12 +78,14 @@ class ProductControllerTest {
     }
 
     @Test
+    @WithMockUser
     void createProduct() throws Exception {
 
         when(productService.createProduct(any())).thenReturn(product);
 
         RequestBuilder request = MockMvcRequestBuilders
                 .post("/v1/products")
+                .with(csrf())
                 .accept(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(product))
                 .contentType(MediaType.APPLICATION_JSON);
@@ -95,6 +98,7 @@ class ProductControllerTest {
     }
 
     @Test
+    @WithMockUser
     void updateProduct() throws Exception {
 
         when(productService.getProductById(any())).thenReturn(product);
@@ -102,6 +106,7 @@ class ProductControllerTest {
 
         RequestBuilder request = MockMvcRequestBuilders
                 .put("/v1/products/{id}", "6521edebb9ae5f1b1d01d5a8")
+                .with(csrf())
                 .accept(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(product))
                 .contentType(MediaType.APPLICATION_JSON);
@@ -113,10 +118,12 @@ class ProductControllerTest {
     }
 
     @Test
+    @WithMockUser
     void deleteProductById() throws Exception {
 
         RequestBuilder request = MockMvcRequestBuilders
                 .delete("/v1/products/{id}", "6521edebb9ae5f1b1d01d5a8")
+                .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON);
 
 
