@@ -26,7 +26,7 @@
     <sonar.host.url>http://127.0.0.1:9000</sonar.host.url>
     <sonar.projectKey>${project.name}</sonar.projectKey>
     <!--suppress UnresolvedMavenProperty -->
-    <sonar.token>squ_851f90d6e9cf0e1cd331202cbcf44f00cc5eebb0</sonar.token>
+    <sonar.token>squ_48f46cea9346587961a7e571ff2e253eb7834dd4</sonar.token>
     <sonar.scm.provider>git</sonar.scm.provider>
     <sonar.java.codeCoveragePlugin>jacoco</sonar.java.codeCoveragePlugin>
     <sonar.coverage.jacoco.xmlReportPaths>${project.test.result.directory}/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>

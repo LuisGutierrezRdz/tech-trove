@@ -1,10 +1,10 @@
-package techtrovepom.orderservice.repository.config;
+package techtrovepom.orderservice.infrastructure.repository.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.core.convert.MongoCustomConversions;
-import techtrovepom.orderservice.repository.converter.ZonedDateTimeReadConverter;
-import techtrovepom.orderservice.repository.converter.ZonedDateTimeWriteConverter;
+import techtrovepom.orderservice.infrastructure.repository.converter.ZonedDateTimeReadConverter;
+import techtrovepom.orderservice.infrastructure.repository.converter.ZonedDateTimeWriteConverter;
 
 import static java.util.Arrays.asList;
 

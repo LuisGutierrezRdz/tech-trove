@@ -1,4 +1,4 @@
-package techtrovepom.orderservice.repository;
+package techtrovepom.orderservice.infrastructure.repository;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;

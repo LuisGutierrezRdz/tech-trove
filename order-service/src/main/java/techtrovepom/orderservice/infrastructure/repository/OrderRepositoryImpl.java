@@ -1,4 +1,4 @@
-package techtrovepom.orderservice.repository;
+package techtrovepom.orderservice.infrastructure.repository;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -1,4 +1,4 @@
-package techtrovepom.orderservice.repository.converter;
+package techtrovepom.orderservice.infrastructure.repository.converter;
 
 import org.springframework.core.convert.converter.Converter;
 
