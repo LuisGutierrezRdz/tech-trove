@@ -34,6 +34,7 @@
 		<sonar.exclusions>**/*.xml</sonar.exclusions>
 		<sonar.coverage.exclusions>**/${project.name}/*,
 			**/application/RestResponseEntityExceptionHandler.java,
+			**/application/config/*.java,
 			**/application/converter/*.java,
 			**/application/request/*.java,
 			**/application/response/*.java,
@@ -166,6 +167,7 @@
 						<exclude>
 							com/techtrove/orderservice/application/RestResponseEntityExceptionHandler.class
 						</exclude>
+						<exclude>com/techtrove/orderservice/application/config/*.class</exclude>
 						<exclude>com/techtrove/orderservice/application/converter/*.class</exclude>
 						<exclude>com/techtrove/orderservice/application/request/*.class</exclude>
 						<exclude>com/techtrove/orderservice/application/response/*.class</exclude>

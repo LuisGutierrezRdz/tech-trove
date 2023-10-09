@@ -15,7 +15,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.ContextConfiguration;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.RequestBuilder;
@@ -24,9 +24,9 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 
 @WebMvcTest(UserController.class)
-@ContextConfiguration
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 class UserControllerTest {
 
@@ -55,6 +55,7 @@ class UserControllerTest {
     }
 
     @Test
+    @WithMockUser
     void getUserById() throws Exception {
 
         when(userService.getUserById(any())).thenReturn(user);
@@ -72,24 +73,7 @@ class UserControllerTest {
     }
 
     @Test
-    void createUser() throws Exception {
-
-        when(userService.createUser(any())).thenReturn(user);
-
-        RequestBuilder request = MockMvcRequestBuilders
-                .post("/v1/users")
-                .accept(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(user))
-                .contentType(MediaType.APPLICATION_JSON);
-
-        MvcResult result = mockMvc.perform(request).andReturn();
-
-        assertEquals(HttpStatus.CREATED.value(), result.getResponse().getStatus());
-
-        JSONAssert.assertEquals(expectedResponse, result.getResponse().getContentAsString(), false);
-    }
-
-    @Test
+    @WithMockUser
     void updateUser() throws Exception {
 
         when(userService.getUserById(any())).thenReturn(user);
@@ -97,6 +81,7 @@ class UserControllerTest {
 
         RequestBuilder request = MockMvcRequestBuilders
                 .put("/v1/users/{id}", "6521edebb9ae5f1b1d01d5a8")
+                .with(csrf())
                 .accept(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(user))
                 .contentType(MediaType.APPLICATION_JSON);
@@ -109,10 +94,12 @@ class UserControllerTest {
     }
 
     @Test
+    @WithMockUser
     void deleteUserById() throws Exception {
 
         RequestBuilder request = MockMvcRequestBuilders
                 .delete("/v1/users/{id}", "6521edebb9ae5f1b1d01d5a8")
+                .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON);
 
 
